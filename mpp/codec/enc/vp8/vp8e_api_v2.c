@@ -207,13 +207,14 @@ static MPP_RET vp8e_proc_prep_cfg(MppEncPrepCfg *dst, MppEncPrepCfg *src)
 
         /* vp8 encoder do not have denoise/sharpen feature */
 
+        // LookDeep patch - fix 4k dimensions
         if (change & MPP_ENC_PREP_CFG_CHANGE_INPUT ||
             (change & MPP_ENC_PREP_CFG_CHANGE_ROTATION)) {
-            if ((src->width < 0 || src->width > 1920) ||
-                (src->height < 0 || src->height > 3840) ||
+            if ((src->width < 0 || src->width > 3840) ||
+                (src->height < 0 || src->height > 2160) ||
                 (src->hor_stride < 0 || src->hor_stride > 7680) ||
-                (src->ver_stride < 0 || src->ver_stride > 3840)) {
-                mpp_err("invalid input w:h [%d:%d] [%d:%d]\n",
+                (src->ver_stride < 0 || src->ver_stride > 4320)) {
+                mpp_err("invalid input requested w:h [%d:%d] [%d:%d]\n",
                         src->width, src->height,
                         src->hor_stride, src->ver_stride);
                 ret = MPP_NOK;
